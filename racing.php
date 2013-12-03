@@ -15,6 +15,9 @@
 	Use the GET method for your ajax calls.  When you have data returned from the server, you may format it as XML or JSON, or any other format you feel like working with (including plain text).  See the JQuery documentation on $.ajax for more information on the different data formats.
 */
 
+    include("db.inc.php");
+
+
 ?>
 
 <!DOCTYPE HTML>
@@ -34,19 +37,29 @@
     </div>
     
     <div id="racetrack">
+
+        <div class = "feelings">
+            <h2>How Everyone Feels:</h2>
+        </div>
+
     	<div class="racer" id="chicken">
+            <div class = "feelings"><p>Amelia the chicken <span id="ch_state"></span></p><span id="ch_mod" class = "mod"></span>
+            </div>
         	<img src="images/chicken.png" />
         </div>
         
         <div class="racer" id="crab">
+            <div class = "feelings"><p>Hans the crab <span id="cr_state"></span></p><span id="cr_mod" class = "mod"></span></div>
         	<img src="images/crab.png" />
         </div>
         
         <div class="racer" id="goat">
+            <div class = "feelings"><p>Philbert the goat <span id="go_state"></span></p><span id="go_mod" class = "mod"></span></div>
         	<img src="images/goat-icon.png" />
         </div>
         
         <div class="racer" id="beachball">
+            <div class = "feelings"><p>Lawrence the beachball <span id="bb_state"></span></p><span id="bb_mod" class = "mod"></span></div>
         	<img src="images/beachball.png" />
         </div>
     </div>
@@ -56,14 +69,52 @@
         	<input type="submit" value="New Race!" id="btnNewRace" name="btnNewRace" />
             <input type="hidden" value="0" name="winnings" id="winnings" />
         </form>
-    	<?php include("status.inc.php"); ?>
-        <!-- rather than the include, move the HTML status section back here, and use jquery to change the values -->
+
+        
+        <!--PHP is currently inserting values into this HTML.  When you change things over to ajax, you need to take this and put it back on the main page.
+        Then, use jquery to insert the values, instead of PHP-->
+        
+        
+        
+        
+        
+
     </div>
     
     <div id="bettingbox">
-    	<?php include("betting.inc.php"); ?>
+    	
         <!-- rather than the include, move the HTML betting form back here, and use jquery to update the amount from the waller -->
     	
+        <form name="betting" id="betting" action="betting.inc.php" method="get">
+            <input type="submit" name="btnBet" id="btnBet" value="Bet and Start Race!" /><br />
+            <h2>Bet on this race!</h2>
+
+            <?php 
+                $query="SELECT money
+                        FROM wsfinal_wallet";
+                
+                $rs = mysqli_query($oConn, $query);
+                
+                if($rs){
+                    $row = mysqli_fetch_assoc($rs);
+                    $total = $row['money']; 
+                }
+
+            ?>
+
+            <p id="total">Your current total: $<span id="totalMoney"><?php echo $total; ?></span></p>
+            <p><label for="bet">Bet: $</label>
+            <input type="text" name="bet" id="bet" maxlength="3" value="10" /></p>
+            <p><label for="racername">Racer:</label>
+            <select name="racersel" id="racersel">
+                <option value="chicken">Amelia, the Chicken</option>
+                <option value="crab">Hans, the Crab</option>
+                <option value="goat">Philbert, the Goat</option>
+                <option value="beachball">Lawrence, the Beachball</option>
+            </select></p>
+        </form>
+
+
     </div>
 </div>
 </body>

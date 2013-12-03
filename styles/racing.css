@@ -57,6 +57,37 @@ h2{
 	margin:10px 0;	
 }
 
+#wrapper.start{
+	width:1000px;
+	height:1400px;
+	margin:0 auto;	
+}
+
+#wrapper.start #header{
+	width:840px;
+	height:128px;
+	background:url(../images/songbird.png) top left no-repeat;
+	margin-left:20px;
+	padding-left:140px;	
+	font-size:48px;
+}
+
+#wrapper.start #header h1{
+	padding-top:70px;	
+}
+
+#wrapper.start h2, #wrapper.set h2,#wrapper.go h2,#wrapper.pause h2{
+	font-size:24px;
+	margin:10px 0;	
+}
+
+#wrapper.start .feelings h2
+{
+	text-align:center;
+	position: relative;
+	z-index: 5;
+}
+
 /**********************************************************************************************************
 				RaceTrack
 **********************************************************************************************************/
@@ -65,13 +96,37 @@ h2{
 	height:600px;
 	padding-top:20px;
 	background:url(../images/racktrack.jpg) top left no-repeat;	
+	overflow-x: hidden;
+	overflow-y: hidden;
+	position: relative;
+}
+
+#racetrack::after
+{
+	content:"";
+	width: 1000px;
+	height:600px;
+	position: absolute;
+	top: 0;
+	left: 0;
+	background-color: #fff;
+	display: block;
+	opacity: 0;
+
+	-webkit-transition: opacity 600ms ease-out 0s;
+    -moz-transition: opacity 600ms ease-out 0s;
+    -o-transition: opacity 600ms ease-out 0s;
+    transition: opacity 600ms ease-out 0s;
 }
 
 .racer{
 	width:1000px;
 	height:128px;
 	margin-bottom:10px;
-	position:relative;	
+	position:relative;
+
+    
+
 }
 
 .racer img{
@@ -82,7 +137,130 @@ h2{
 	-webkit-transform:rotate(20deg);
 	-o-transform:rotate(20deg);
 	transform:rotate(20deg);	
+
+	-webkit-transition: left 100ms ease-out 0s;
+    -moz-transition: left 100ms ease-out 0s;
+    -o-transition: left 100ms ease-out 0s;
+    transition: left 100ms ease-out 0s;
+
+    -webkit-transition: top 600ms ease-out 0s;
+    -moz-transition: top 600ms ease-out 0s;
+    -o-transition: top 600ms ease-out 0s;
+    transition: top 600ms ease-out 0s;
 }
+
+#wrapper.start #racetrack::after, #wrapper.exit #racetrack::after{
+	
+	opacity: 1;
+	
+}
+#wrapper.set #racetrack::after{
+	
+	opacity: 0;
+	
+}
+
+#wrapper.start.set #racetrack{
+	
+	background:url(../images/racktrack.jpg) top left no-repeat;	
+
+}
+
+#wrapper.start .racer, #wrapper.exit .racer{
+	width: 25%;
+	height:128px;
+	margin-top: 130px;
+	margin-bottom:10px;
+	position:relative;	
+	float: left;
+	z-index: 6;
+}
+
+#wrapper.start .racer img, #wrapper.exit .racer img{
+	position: relative;
+	/* top:0; */
+	/* left:0; */
+	-moz-transform: none;
+	-webkit-transform: none;
+	-o-transform: none;
+	transform: none;	
+	margin: 0 auto;
+	text-align: center;
+	width: 50%;
+	padding: 0 25%;
+
+	
+}
+
+#wrapper.start.racer img
+{
+	top:0px;
+}
+
+#wrapper.exit.pause .racer img
+{
+	top:-500px;
+}
+
+
+#wrapper.start.set .racer img, #wrapper.exit .racer img{
+	position: relative;
+	top:-800px; 
+	
+		
+}
+
+
+#wrapper.go .racer img{
+	position:absolute;
+	top:0;
+	left: -150px !important;
+	-moz-transform:none;
+	-webkit-transform:none;
+	-o-transform:none;
+	transform:none;
+}
+
+
+
+.feelings
+{
+	opacity:0;
+	-webkit-transition: opacity 100ms ease-out 0s;
+    -moz-transition: opacity 100ms ease-out 0s;
+    -o-transition: opacity 100ms ease-out 0s;
+    transition: opacity 100ms ease-out 0s;
+}
+
+#wrapper.start .feelings
+{
+	opacity:1;
+	z-index: 5;
+}
+
+#wrapper .feelings p
+{
+	position:absolute;
+	bottom: -60px;	
+	height: 40px;
+	width: 80%;
+	padding: 0 10%;
+}
+
+.feelings p span
+{
+	font-size:1.6em;
+	float:left;
+	font-weight:normal;
+}
+
+
+#wrapper.start.set .feelings
+{
+	opacity:0;
+}
+
+
 
 /**********************************************************************************************************
 				Status Box
@@ -97,9 +275,24 @@ h2{
 	margin-bottom:5px;	
 }
 
-#statusbox span{
+span.mod{
 	display:none;
 }
+
+#wrapper.start #statusbox{
+	width:600px;
+	height:400px;
+	float:left;		
+}
+
+#wrapper.start #statusbox p{
+	margin-bottom:5px;		
+}
+
+#wrapper.start  span.mod{
+	display:none;
+}
+
 
 /**********************************************************************************************************
 				Betting Box
@@ -112,5 +305,16 @@ h2{
 }
 
 #bettingbox p{
+	margin-bottom:5px;	
+}
+
+#wrapper.start #bettingbox{
+	width:400px;
+	height:400px;
+	float:right;
+	text-align:right;	
+}
+
+#wrapper.start #bettingbox p{
 	margin-bottom:5px;	
 }

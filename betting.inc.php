@@ -29,25 +29,10 @@
 				WHERE id=1";
 		//run update query
 		$rs = mysqli_query($oConn, $query);
+
+		echo $total;
 	}
 ?>
-
-<!-- this form shouldn't actually ever go anywhere, as jquery is currently stopping it (and you should keep it that way).
-Move this form back to the main page and use jquery to update the total. -->
-<form name="betting" id="betting" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="get">
-    <input type="submit" name="btnBet" id="btnBet" value="Bet and Start Race!" /><br />
-    <h2>Bet on this race!</h2>
-    <p id="total">Your current total: $<?php echo $total; ?></p>
-    <p><label for="bet">Bet: $</label>
-    <input type="text" name="bet" id="bet" maxlength="3" value="10" /></p>
-    <p><label for="racername">Racer:</label>
-    <select name="racersel" id="racersel">
-        <option value="chicken">Amelia, the Chicken</option>
-        <option value="crab">Hans, the Crab</option>
-        <option value="goat">Philbert, the Goat</option>
-        <option value="beachball">Lawrence, the Beachball</option>
-    </select></p>
-</form>
 
 
 <?php

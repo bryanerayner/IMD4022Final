@@ -30,15 +30,15 @@
 			$mods[$i] = $row["status_modifier"];
 		}
 	}
-?>
-<!--PHP is currently inserting values into this HTML.  When you change things over to ajax, you need to take this and put it back on the main page.
-Then, use jquery to insert the values, instead of PHP-->
-<h2>How Everyone Feels:</h2>
-<p>Amelia the chicken <?php echo $states[0]; ?></p><span id="ch_mod"><?php echo $mods[0]; ?></span>
-<p>Hans the crab <?php echo $states[1]; ?></p><span id="cr_mod"><?php echo $mods[1]; ?></span>
-<p>Philbert the goat <?php echo $states[2]; ?></p><span id="go_mod"><?php echo $mods[2]; ?></span>
-<p>Lawrence the beachball <?php echo $states[3]; ?></p><span id="bb_mod"><?php echo $mods[3]; ?></span>
 
-<?php
+	$output = array("states"=>$states,
+					"mods"=>$mods);
+
+	header('Content-Type: application/json');
+	echo json_encode($output);
+
+
+
+
 	mysqli_close($oConn);
 ?>

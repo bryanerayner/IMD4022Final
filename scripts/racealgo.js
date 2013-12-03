@@ -19,7 +19,7 @@ var race = "";
 
 $(document).ready(function(){
 	//reset race at the start of the page
-	resetRace()
+	resetRace();
 	
 	//the place bet and start race button
 	//this button only works if the race variable is set to "" (before the race starts)
@@ -28,23 +28,36 @@ $(document).ready(function(){
 		event.preventDefault();
 		
 		//make sure the race hasn't started
-		if(race == ""){
-			//set to race to running
-			race="running";
-			
-			/***********************************************************************************************
-				Step 1: add jquery here to hide the betting form after the race has started (but keep showing the total amount of money)
-			***********************************************************************************************/
-			
-			
-			
-			//get each of the characters divs by class and use their ID to send to the movement function
-			//this loop calls the characterMove function four times, one for each character
-			var c = 0;
-			$('.racer').each(function(){
-				characterMove($(this).attr('id'), c);
-				c++
-			});
+		if(race == "")
+		{
+			$("#wrapper").addClass("set");
+
+			setTimeout(function(){
+				$("#wrapper").removeClass("start").addClass("go");
+			},800);
+			setTimeout(function(){
+				$("#wrapper").removeClass("set go");
+			},900);
+
+			setTimeout(function(){
+				//set to race to running
+				race="running";
+				
+				/***********************************************************************************************
+					Step 1: add jquery here to hide the betting form after the race has started (but keep showing the total amount of money)
+				***********************************************************************************************/
+				$("#betting > *").hide();
+				$("#total").show();
+				
+				
+				//get each of the characters divs by class and use their ID to send to the movement function
+				//this loop calls the characterMove function four times, one for each character
+				var c = 0;
+				$('.racer').each(function(){
+					characterMove($(this).attr('id'), c);
+					c++
+				});
+			},1200);
 		}
 	});
 	
@@ -63,25 +76,84 @@ $(document).ready(function(){
 			
 			See status.inc.php for more instructions on how to deal with this.
 		********************************************************************************************/
+
+		///getStatuses is the ajax call - It's called from resetRace(), which ensures it's called at page load and the start of a new event.
+
+
+
+
+
+
 		if(race == "running"){
 			event.preventDefault();	
 		}
+		else
+		{
+			resetRace();
+			
+		
+		}
+		return false;
 	});
 	
 
 });
 
+
+
+function getStatuses()
+{
+	$.ajax({
+			url: "status.inc.php",
+			dataType:"json",
+			data:{},
+			success:function(data){
+				var states = data.states;
+				var mods= data.mods;
+				var names = ["ch_","cr_","go_","bb_"];
+				for (var i = 0, ii = names.length; i !== ii; i++)
+				{
+					$("#"+names[i]+"state").html(states[i]);
+					$("#"+names[i]+"mod").html(mods[i]);
+				}
+			}});
+}
+
+
 //this function makes sure all characters are in the right place and all modifiers are loaded
 function resetRace(){
-	//this gets the mods from the hidden spans and puts them into the array, in order of racer
-	$("#statusbox span").each(function(){
-		mods.push(Number($(this).text()));
-	});
-	
-	//this resets each image to have a position left of 0px
-	$("#racetrack img").each(function(){
-		$(this).css('left', 0);
-	});
+
+	if (race == "" && !race == "over")
+	{
+		$("#wrapper").addClass("start");
+	}
+
+	if (race != "running")
+	{
+		race = "";
+		$("#wrapper").removeClass("start").addClass("exit");
+		setTimeout(function(){
+			$("#wrapper").addClass("pause");
+		},200);
+		setTimeout(function(){
+			$("#wrapper").removeClass("exit pause").addClass("start");
+		},400);
+
+		//this gets the mods from the hidden spans and puts them into the array, in order of racer
+		$("span.mod").each(function(){
+			mods.push(Number($(this).text()));
+		});
+		
+		//this resets each image to have a position left of 0px
+		$("#racetrack img").each(function(){
+			$(this).css('left', 0);
+		});
+
+		setTimeout(function()
+		{
+			getStatuses();
+		},100);
+	}
 }
 
 
@@ -108,7 +180,7 @@ function characterMove(char, c){
 				easing: 'linear',
 				complete: function(){characterMove(char,c);}
 			}
-		);
+		).siblings(".feelings").hide().parent().siblings(".feelings").hide();
 	}else{
 		if(race != "over"){
 			//alert the winner
@@ -129,19 +201,43 @@ function characterMove(char, c){
 				
 				In your ajax call, make sure the datatype property is set to text.
 			**************************************************************************************************/
-			
+
+
+			$("#betting > *").show();			
+
 			//check if the character selected won or lost, and make either a positive or negative number the value of the hidden field
 			if($("#racersel option:selected").val()==char){
 				$("#winnings").val(amount);
 			}else{
-				$("#winnings").val("-" + amount);	
+				$("#winnings").val("-" + amount);
 			}
+			
+			$.ajax({
+				url: "betting.inc.php",
+				dataType:"text",
+				data:{
+					winnings:$("#winnings").val()
+				},
+				success:function(data){
+					$("#totalMoney").text(data);
+				},
+				error:function(){
+
+				}
+
+			})
+
+
 			
 			/**************************************************************************************************/
 			//leave this alone! All your ajax stuff for step 2 should go above here.
 			//set the race to over!
-			race = "over";	
+			race = "over";				
 		}
+		$('#' + char + ' img').css("left",1100).siblings(".feelings").show();
+		setTimeout(function(){
+			$(".feelings").show();
+		}, 300);
 	}
 }
 
@@ -163,3 +259,4 @@ function getDis(speedCheck, pos){
 	//return time and distance
 	return [randomDur,randomDis];
 }
+
